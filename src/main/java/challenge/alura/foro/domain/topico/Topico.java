@@ -36,12 +36,31 @@ public class Topico {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
+    @Column(name = "activo")
+    private Boolean activo;
+
     public Topico(DatosRegistroTopico datos, Usuario usuario) {
         this.titulo = datos.titulo();
         this.mensaje = datos.mensaje();
         this.nombreCurso = datos.nombreCurso();
         this.fechaCreacion = LocalDateTime.now();
         this.usuario = usuario;
+    }
+
+    public void desactivarTopico() {
+        this.activo = false;
+    }
+
+    public void actualizarTopico(DatosActualizarTopico datos) {
+        if (datos.titulo() != null){
+            this.titulo = datos.titulo();
+        }
+        if (datos.mensaje() != null){
+            this.mensaje = datos.mensaje();
+        }
+        if (datos.nombreCurso() != null){
+            this.nombreCurso = datos.nombreCurso();
+        }
     }
 }
 

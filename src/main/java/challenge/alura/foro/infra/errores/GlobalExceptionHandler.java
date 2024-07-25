@@ -1,5 +1,6 @@
 package challenge.alura.foro.infra.errores;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,8 +15,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(ex.getStatusCode().value(), ex.getReason()), ex.getStatusCode());
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse(404, "Usuario no encontrado"), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse(404, ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGenericException(Exception ex) {
+        System.out.println(ex);
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Ocurrió un error inesperado"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
